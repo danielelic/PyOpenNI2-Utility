@@ -23,6 +23,7 @@ $ ln -s /usr/lib/OpenNI2
 
 import numpy as np
 from primesense import openni2
+from primesense import _openni2 as c_api
 
 import cv2
 
@@ -34,6 +35,8 @@ except (RuntimeError, TypeError, NameError):
 	print(RuntimeError, TypeError, NameError)
 depth_stream = dev.create_depth_stream()
 color_stream = dev.create_color_stream()
+depth_stream.set_video_mode(c_api.OniVideoMode(pixelFormat = c_api.OniPixelFormat.ONI_PIXEL_FORMAT_DEPTH_1_MM, resolutionX = 640, resolutionY = 480, fps = 30))
+color_stream.set_video_mode(c_api.OniVideoMode(pixelFormat = c_api.OniPixelFormat.ONI_PIXEL_FORMAT_RGB888, resolutionX = 640, resolutionY = 480, fps = 30))
 depth_stream.start()
 color_stream.start()
 
