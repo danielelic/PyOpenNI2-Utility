@@ -14,7 +14,7 @@ You should link the libOpenNI2.so and the OpenNI2 directory in the script path.
 If they are located inside /usr/lib, you could
 
 $ ln -s /usr/lib/libOpenNI2.so
-$ > ln -s /usr/lib/OpenNI2
+$ ln -s /usr/lib/OpenNI2
 
 :copyright: (c) 2015 by Daniele Liciotti.
 :license: Apache2, see LICENSE for more details.

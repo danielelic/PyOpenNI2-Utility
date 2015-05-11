@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-PyNiViewer
+PyNiSimpleViewer
 ~~~~~~~~~~
 
 This script implements a depth stream reader.
