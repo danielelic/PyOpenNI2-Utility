@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-PyNiRecorderDepth
+PyNiRecorder
 ~~~~~~~~~~~~
 
 This script implements a ONI file writer.
@@ -20,47 +20,64 @@ $ ln -s /usr/lib/OpenNI2
 :license: Apache2, see LICENSE for more details.
 :date: 2016-07-07
 """
-
-import os, time
+import time
 from primesense import openni2
 from primesense import _openni2 as c_api
-import cv2
+import argparse
 
-
-def write_files(dev):
-        """
-        Captures the point cloud and write it on a Oni file. 
-        """
-        
-        depth_stream = dev.create_depth_stream()
-        print (dev.get_sensor_info(openni2.SENSOR_DEPTH))
-
-        depth_stream.set_video_mode(c_api.OniVideoMode(pixelFormat = c_api.OniPixelFormat.ONI_PIXEL_FORMAT_DEPTH_1_MM, resolutionX = 320, resolutionY = 240, fps = 30))
-        depth_stream.start()
-        dev.set_image_registration_mode(True)
-
-        rec = openni2.Recorder(time.strftime("%Y%m%d%H%M")+".oni")
-        rec.attach(depth_stream)
-        print (rec.start())
-        raw_input("Press enter to terminate the recording")
-        rec.stop()
-        depth_stream.stop()
 
 def main():
-        """The entry point"""
-        try:
-            openni2.initialize()     # can also accept the path of the OpenNI redistribution
-        except:
-            print ("Device not initialized")
-            return
-        
-        try:
-            dev = openni2.Device.open_any()
-            write_files(dev)
-        except:
-            print ("Unable to open the device")
-            
-        openni2.unload()
+    # set and parse the arguments list
+    p = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter,
+                                description="")
+    p.add_argument('-time',
+                   dest='time',
+                   action='store',
+                   default='',
+                   help='no of seconds')
+    p.add_argument('-cycle',
+                   dest='cycle',
+                   action='store',
+                   default='',
+                   help='no of cycles')
+    args = p.parse_args()
+
+    try:
+        openni2.initialize()  # can also accept the path of the OpenNI redistribution
+    except:
+        print ("Device not initialized")
+        return
+
+    try:
+        dev = openni2.Device.open_any()
+    except:
+        print ("Unable to open the device")
+
+    print dev.get_sensor_info(openni2.SENSOR_DEPTH)
+    depth_stream = dev.create_depth_stream()
+
+    depth_stream.set_video_mode(
+            c_api.OniVideoMode(pixelFormat=c_api.OniPixelFormat.ONI_PIXEL_FORMAT_DEPTH_1_MM,
+                               resolutionX=320,
+                               resolutionY=240,
+                               fps=30))
+    dev.set_image_registration_mode(True)
+    depth_stream.start()
+
+    for i in range(int(args.cycle)):
+        print('iteration : {}'.format(i))
+
+        rec = openni2.Recorder(time.strftime("%Y%m%d%H%M%S") + ".oni")
+        rec.attach(depth_stream)
+        print("Start video recorder...")
+        rec.start()
+        time.sleep(int(args.time))
+        print("Stop video recorder...")
+        rec.stop()
+
+    depth_stream.stop()
+    openni2.unload()
+
 
 if __name__ == '__main__':
-        main()
+    main()
