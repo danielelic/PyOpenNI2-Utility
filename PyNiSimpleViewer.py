@@ -8,7 +8,7 @@ PyNiSimpleViewer
 This script implements a depth stream reader.
 
 
-Usage: python2 PyNiSimpleViewer
+Usage: python2 PyNiSimpleViewer.py
 
 You should link the libOpenNI2.so and the OpenNI2 directory in the script path.
 If they are located inside /usr/lib, you could
