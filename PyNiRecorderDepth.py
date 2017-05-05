@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-PyNiRecorder
+PyNiRecorderDepth.py -time <seconds> -cycles <number of cycles>
 ~~~~~~~~~~~~
 
 This script implements a ONI file writer.
@@ -20,6 +20,7 @@ $ ln -s /usr/lib/OpenNI2
 :license: Apache2, see LICENSE for more details.
 :date: 2016-07-07
 """
+
 import time
 from primesense import openni2
 from primesense import _openni2 as c_api
@@ -35,36 +36,37 @@ def main():
                    action='store',
                    default='',
                    help='no of seconds')
-    p.add_argument('-cycle',
-                   dest='cycle',
+    p.add_argument('-cycles',
+                   dest='cycles',
                    action='store',
                    default='',
                    help='no of cycles')
     args = p.parse_args()
 
+    dev = openni2.Device
     try:
         openni2.initialize()  # can also accept the path of the OpenNI redistribution
     except:
-        print ("Device not initialized")
+        print("Device not initialized")
         return
 
     try:
         dev = openni2.Device.open_any()
     except:
-        print ("Unable to open the device")
+        print("Unable to open the device")
 
-    print dev.get_sensor_info(openni2.SENSOR_DEPTH)
+    print(dev.get_sensor_info(openni2.SENSOR_DEPTH))
     depth_stream = dev.create_depth_stream()
 
     depth_stream.set_video_mode(
-            c_api.OniVideoMode(pixelFormat=c_api.OniPixelFormat.ONI_PIXEL_FORMAT_DEPTH_1_MM,
-                               resolutionX=320,
-                               resolutionY=240,
-                               fps=30))
+        c_api.OniVideoMode(pixelFormat=c_api.OniPixelFormat.ONI_PIXEL_FORMAT_DEPTH_1_MM,
+                           resolutionX=320,
+                           resolutionY=240,
+                           fps=30))
     dev.set_image_registration_mode(True)
     depth_stream.start()
 
-    for i in range(int(args.cycle)):
+    for i in range(int(args.cycles)):
         print('iteration : {}'.format(i))
 
         rec = openni2.Recorder(time.strftime("%Y%m%d%H%M%S") + ".oni")
