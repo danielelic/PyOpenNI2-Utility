@@ -2,13 +2,13 @@
 # -*- coding: utf-8 -*-
 
 """
-PyNiRecorderDepth.py -time <seconds> -cycles <number of cycles>
+recorder_depth.py -time <seconds> -cycles <number of cycles>
 ~~~~~~~~~~~~
 
 This script implements a ONI file writer.
 
 
-Usage: python2 PyNiRecorderDepth.py
+Usage: python2 recorder_depth.py
 
 You should link the libOpenNI2.so and the OpenNI2 directory in the script path.
 If they are located inside /usr/lib, you could
@@ -21,13 +21,13 @@ $ ln -s /usr/lib/OpenNI2
 :date: 2016-07-07
 """
 
-import time
-from primesense import openni2
-from primesense import _openni2 as c_api
 import argparse
+import time
 
+from primesense import _openni2 as c_api
+from primesense import openni2
 
-def main():
+if __name__ == '__main__':
     # set and parse the arguments list
     p = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter,
                                 description="")
@@ -48,12 +48,11 @@ def main():
         openni2.initialize()  # can also accept the path of the OpenNI redistribution
     except:
         print("Device not initialized")
-        return
-
     try:
         dev = openni2.Device.open_any()
     except:
         print("Unable to open the device")
+        raise SystemExit
 
     print(dev.get_sensor_info(openni2.SENSOR_DEPTH))
     depth_stream = dev.create_depth_stream()
@@ -79,7 +78,3 @@ def main():
 
     depth_stream.stop()
     openni2.unload()
-
-
-if __name__ == '__main__':
-    main()

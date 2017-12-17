@@ -22,8 +22,9 @@ $ ln -s /usr/lib/OpenNI2
 """
 
 import argparse
-import numpy as np
+
 import cv2
+import numpy as np
 from primesense import openni2
 
 
@@ -34,7 +35,7 @@ def openDevice(video_path):
         pbs = openni2.PlaybackSupport(dev)
 
         pbs.set_repeat_enabled(False)
-        pbs.set_speed(0)
+        pbs.set_speed(-1.0)
 
         return dev
     except (RuntimeError, TypeError, NameError):

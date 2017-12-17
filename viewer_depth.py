@@ -2,13 +2,13 @@
 # -*- coding: utf-8 -*-
 
 """
-PyNiViewerDepth.py
+viewer_depth.py
 ~~~~~~~~~~
 
 This script implements a ONI file reader.
 
 
-Usage: python2 PyNiViewerDepth.py --v <capture.oni>
+Usage: python2 viewer_depth.py --v <capture.oni>
 
 You should link the libOpenNI2.so and the OpenNI2 directory in the script path.
 If they are located inside /usr/lib, you could
@@ -22,8 +22,9 @@ $ ln -s /usr/lib/OpenNI2
 """
 
 import argparse
-import numpy as np
+
 import cv2
+import numpy as np
 from primesense import openni2
 
 
@@ -59,7 +60,7 @@ def show(video_path):
     cv2.destroyAllWindows()
 
 
-def main():
+if __name__ == '__main__':
     """The entry point"""
     # set and parse the arguments list
     p = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter, description="")
@@ -67,7 +68,3 @@ def main():
     args = p.parse_args()
     # show the capture!
     show(args.video_path)
-
-
-if __name__ == '__main__':
-    main()

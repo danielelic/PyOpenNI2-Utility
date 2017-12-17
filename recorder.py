@@ -2,13 +2,13 @@
 # -*- coding: utf-8 -*-
 
 """
-PyNiRecorder.py
+recorder.py
 ~~~~~~~~~~~~
 
 This script implements a ONI file writer.
 
 
-Usage: python2 PyNiRecorder
+Usage: python2 recorder.py
 
 You should link the libOpenNI2.so and the OpenNI2 directory in the script path.
 If they are located inside /usr/lib, you could
@@ -22,8 +22,9 @@ $ ln -s /usr/lib/OpenNI2
 """
 
 import time
-from primesense import openni2
+
 from primesense import _openni2 as c_api
+from primesense import openni2
 
 
 def write_files(dev):
@@ -64,14 +65,15 @@ def main():
     except:
         print("Device not initialized")
         return
-
     try:
         dev = openni2.Device.open_any()
         write_files(dev)
     except:
         print("Unable to open the device")
-
-    openni2.unload()
+    try:
+        openni2.unload()
+    except:
+        print("Device not unloaded")
 
 
 if __name__ == '__main__':

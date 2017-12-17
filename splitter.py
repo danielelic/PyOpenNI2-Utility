@@ -2,13 +2,13 @@
 # -*- coding: utf-8 -*-
 
 """
-PyNiSplitter.py
+splitter.py
 ~~~~~~~~~~~~
 
 This script implements a ONI file splitter that writes RGB and depth images.
 
 
-Usage: python2 PyNiSplitter.py --v <ONI file>
+Usage: python2 splitter.py --v <ONI file>
 
 You should link the libOpenNI2.so and the OpenNI2 directory in the script path.
 If they are located inside /usr/lib, you could
@@ -21,10 +21,11 @@ $ ln -s /usr/lib/OpenNI2
 :date: 2017-05-05
 """
 
-import numpy as np
 import argparse
-from primesense import openni2
+
 import cv2
+import numpy as np
+from primesense import openni2
 
 
 def split(video_path):
@@ -66,13 +67,9 @@ def split(video_path):
     cv2.destroyAllWindows()
 
 
-def main():
+if __name__ == '__main__':
     """The entry point"""
     p = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter, description="")
     p.add_argument('--v', dest='video_path', action='store', default='', help='path file *.oni')
     args = p.parse_args()
     split(args.video_path)
-
-
-if __name__ == '__main__':
-    main()
